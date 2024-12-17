@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculator</title>
+  <title>Wein Temperatur Calculator</title>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -18,11 +19,19 @@
   </style>
 </head>
 <body>
-  <h1>Simple Calculator</h1>
-  <p>Enter three numbers:</p>
-  <input type="number" id="num1" placeholder="Number 1">
-  <input type="number" id="num2" placeholder="Number 2">
-  <input type="number" id="num3" placeholder="Number 3">
+  <h1>Newton's Law of Cooling</h1>
+  <p>The formula is:</p>
+  <p>\[T(t) = T_s + (T_0 - T_s) e^{-kt}\]</p>
+  <p>
+    This is the link to Wikipedia: 
+    <a href="https://www.wikipedia.org" target="_blank">Wikipedia</a>, 
+    this is the link to Google: 
+    <a href="https://www.google.com" target="_blank">Google</a>.
+  </p>
+  <p>Zeit berechnen:</p>
+  <input type="number" id="t0" placeholder="Starttemperatur">
+  <input type="number" id="tenv" placeholder="Raumtemperatur">
+  <input type="number" id="tz" placeholder="Zieltemperatur">
   <br>
   <button onclick="calculate()">Calculate</button>
   <p id="result"></p>
@@ -30,18 +39,18 @@
   <script>
     function calculate() {
       // Get values from the inputs
-      const num1 = parseFloat(document.getElementById('num1').value);
-      const num2 = parseFloat(document.getElementById('num2').value);
-      const num3 = parseFloat(document.getElementById('num3').value);
+      const t0 = parseFloat(document.getElementById('t0').value);
+      const tenv = parseFloat(document.getElementById('tenv').value);
+      const tz = parseFloat(document.getElementById('tz').value);
 
       // Validate inputs
-      if (isNaN(num1) || isNaN(num2) || isNaN(num3)) {
+      if (isNaN(t0) || isNaN(tenv) || isNaN(tz)) {
         document.getElementById('result').textContent = 'Please enter valid numbers.';
         return;
       }
 
       // Example calculation: sum of the three numbers
-      const result = num1 + num2 + num3;
+      const result = t0 + tenv + tz;
 
       // Display the result
       document.getElementById('result').textContent = `Result: ${result}`;
