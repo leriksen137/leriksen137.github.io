@@ -3,57 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wein Temperatur Calculator</title>
+  <title>Weintemperatur mit Newton's Law of Cooling</title>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
+      text-align: center;
+    }
+    .formula {
+      text-align: left;
+      margin: 0 auto;
+      width: fit-content;
+      font-size: 18px;
+    }
+    .input-container {
+      margin-top: 20px;
     }
     input {
-      margin: 5px;
+      display: block;
+      margin: 10px auto;
     }
     button {
-      margin: 10px 5px;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
-  <h1>Newton's Law of Cooling</h1>
-  <p>The formula is:</p>
-  <p>\[T(t) = T_s + (T_0 - T_s) e^{-kt}\]</p>
+  <h1>Eriksen's Law of Wine Cooling</h1>
+  <img src="http://www.abflags.com/_flags/flags-of-the-world/Denmark%20flag/Denmark%20flag-M-anim.gif" alt="Denmark" />
   <p>
-    This is the link to Wikipedia: 
-    <a href="https://www.wikipedia.org" target="_blank">Wikipedia</a>, 
-    this is the link to Google: 
-    <a href="https://www.google.com" target="_blank">Google</a>.
+    Formel: 
+    <a href="https://en.wikipedia.org/wiki/Newton%27s_law_of_cooling" target="_blank">Newton's law of cooling</a><br>
+    Konstante von: 
+    <a href="https://winexperiments.blog/2017/07/02/detecting-typos-with-newtons-law-of-cooling/" target="_blank">https://winexperiments.blog</a>.
   </p>
-  <p>Zeit berechnen:</p>
-  <input type="number" id="t0" placeholder="Starttemperatur">
-  <input type="number" id="tenv" placeholder="Raumtemperatur">
-  <input type="number" id="tz" placeholder="Zieltemperatur">
-  <br>
-  <button onclick="calculate()">Calculate</button>
+  
+  <div class="formula">
+    <p>\[T(t) = T_R + (T_0 - T_R) e^{-kt}\]</p>
+  </div>
+  
+  <p> Aufgelöst nach Zeit:</p>
+  <div class="formula">
+    <p>\[t = -1.44 \log\left(\frac{T_Z-T_R}{T_0-T_R}\right)\]</p>
+  </div>
+
+  <div class="input-container">
+    <label>Starttemperatur (T<sub>0</sub>):</label>
+    <input type="number" id="initialTemp" placeholder="Enter T_0">
+
+    <label>Raumtemperatur (T<sub>R</sub>):</label>
+    <input type="number" id="surroundingTemp" placeholder="Enter T_R">
+
+    <label>Zieltemperatur (T<sub>Z</sub>):</label>
+    <input type="number" id="targetTemp" placeholder="Enter T_Z">
+    
+
+    <button onclick="calculate()">Calculate</button>
+  </div>
   <p id="result"></p>
 
   <script>
     function calculate() {
-      // Get values from the inputs
-      const t0 = parseFloat(document.getElementById('t0').value);
-      const tenv = parseFloat(document.getElementById('tenv').value);
-      const tz = parseFloat(document.getElementById('tz').value);
+      const initialTemp = parseFloat(document.getElementById('initialTemp').value);
+      const surroundingTemp = parseFloat(document.getElementById('surroundingTemp').value);
+      const targetTemp = parseFloat(document.getElementById('targetTemp').value);
 
-      // Validate inputs
-      if (isNaN(t0) || isNaN(tenv) || isNaN(tz)) {
-        document.getElementById('result').textContent = 'Please enter valid numbers.';
+      if (isNaN(initialTemp) || isNaN(surroundingTemp) || isNaN(targetTemp)) {
+        document.getElementById('result').textContent = 'Bitte Zahlen eingeben.';
         return;
       }
+      
+      if ((targetTemp < initialTemp && targetTemp < surroundingTemp) || (targetTemp > initialTemp && targetTemp > surroundingTemp)) {
+      	document.getElementById('result').textContent = 'Zieltemperatur muss zwischen den anderen Temperaturen sein.';
+      	return;
+      }
+      
+      if (targetTemp == surroundingTemp && surroundingTemp != initialTemp) {
+      	document.getElementById('result').textContent = 'Zieltemperatur darf nicht Raumtemperatur sein.';
+      	return;
+      }
+	  
+      const result = -1.44 * Math.log((targetTemp-surroundingTemp)/(initialTemp-surroundingTemp));
+      
+      let hours = Math.floor(result);
+      let minutes = Math.round((result - hours) * 60);
+      
+      if (minutes === 60) {
+      	hours += 1;
+      	minutes = 0;
+  	  }
 
-      // Example calculation: sum of the three numbers
-      const result = t0 + tenv + tz;
-
-      // Display the result
-      document.getElementById('result').textContent = `Result: ${result}`;
+      document.getElementById('result').textContent = `Zeit: ${hours} Stunde(n) und ${minutes} Minute(n)`;
     }
   </script>
 </body>
